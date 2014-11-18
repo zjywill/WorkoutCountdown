@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WorkoutCountdown</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
+    <string name="app_name">Countdown</string>
+    <string name="action_add">Add</string>
+    <string name="workout_title">WORKOUT</string>
+    <string name="prepare_title">PREPARATION</string>
+    <string name="rest_title">REST</string>
+    <string name="repetitions_title">REPETITIONS</string>
+    <string name="sets_title">SETS</string>
+    <string name="total_title">TOTAL</string>
+    <string name="remaining_title">REMAINING</string>
+    <string name="start">START</string>
 </resources>

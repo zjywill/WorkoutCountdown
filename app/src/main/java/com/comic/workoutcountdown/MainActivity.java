@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         mItemDecoration = new DividerDecoration(this);
         mRecyclerView.addItemDecoration(mItemDecoration);
 
-        mAdapter = new ListCardAdapter(mData);
+        mAdapter = new ListCardAdapter(this, mData);
         mRecyclerView.setAdapter(mAdapter);
 
     }
