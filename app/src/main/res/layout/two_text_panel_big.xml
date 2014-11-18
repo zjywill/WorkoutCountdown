@@ -8,7 +8,8 @@
         android:id="@+id/text_big_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="JLKLJK"
+        android:text="Workout:"
+        android:textColor="@color/green_500"
         android:textSize="30dp" />
 
     <TextView

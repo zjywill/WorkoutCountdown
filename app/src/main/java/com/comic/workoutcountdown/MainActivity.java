@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 
 
 public class MainActivity extends Activity {
@@ -32,6 +33,12 @@ public class MainActivity extends Activity {
         mAdapter = new ListCardAdapter(mData);
         mRecyclerView.setAdapter(mAdapter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     @Override

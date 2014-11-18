@@ -11,8 +11,7 @@
         android:layout_gravity="center"
         card_view:cardCornerRadius="4dp"
         card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPadding="10dp">
+        card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,13 +21,17 @@
                 android:id="@+id/workout_text"
                 layout="@layout/two_text_panel_big"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp" />
 
             <LinearLayout
                 android:id="@+id/sub_workout_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/workout_text">
+                android:layout_below="@id/workout_text"
+                android:layout_margin="16dp">
 
                 <include
                     android:id="@+id/prepare_text"
@@ -46,9 +49,21 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/card_divider"
                 style="@style/divider"
                 android:layout_below="@id/sub_workout_text"
-                android:padding="10dp" />
+                android:layout_marginBottom="2dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/card_divider"
+                android:layout_marginRight="3dp"
+                android:background="@null"
+                android:text="Start"
+                android:textColor="@color/orange_500"
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
