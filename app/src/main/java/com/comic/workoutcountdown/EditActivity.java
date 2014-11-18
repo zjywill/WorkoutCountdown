@@ -3,13 +3,12 @@ package com.comic.workoutcountdown;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import com.comic.workoutcountdown.utils.Utils;
 
@@ -21,8 +20,19 @@ import java.lang.reflect.Field;
 public class EditActivity extends Activity {
 
     private View mWorkoutPanel;
+    private TextView mWorkoutTitle;
     private NumberPicker mWorkoutMin;
     private NumberPicker mWorkoutSecond;
+
+    private View mPreparePanel;
+    private TextView mPrepareTitle;
+    private NumberPicker mPrepareMin;
+    private NumberPicker mPrepareSecond;
+
+    private View mRestPanel;
+    private TextView mRestTitle;
+    private NumberPicker mRestMin;
+    private NumberPicker mRestSecond;
 
 
     @Override
@@ -39,8 +49,12 @@ public class EditActivity extends Activity {
         mWorkoutMin = (NumberPicker) mWorkoutPanel.findViewById(R.id.min);
         mWorkoutSecond = (NumberPicker) mWorkoutPanel.findViewById(R.id.second);
 
+        mWorkoutTitle = (TextView) mWorkoutPanel.findViewById(R.id.title_text);
+        mWorkoutTitle.setText(R.string.workout_title);
+
         mWorkoutMin.setMaxValue(60);
         mWorkoutMin.setMinValue(0);
+        mWorkoutMin.setValue(1);
         mWorkoutMin.setWrapSelectorWheel(false);
         setNumberPickerTextColor(this, mWorkoutMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mWorkoutMin, R.drawable.picker_divider);
@@ -50,6 +64,47 @@ public class EditActivity extends Activity {
         mWorkoutSecond.setWrapSelectorWheel(false);
         setNumberPickerTextColor(this, mWorkoutSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mWorkoutSecond, R.drawable.picker_divider);
+
+
+        mPreparePanel = (View) findViewById(R.id.prepare_time_picker);
+        mPrepareMin = (NumberPicker) mPreparePanel.findViewById(R.id.min);
+        mPrepareSecond = (NumberPicker) mPreparePanel.findViewById(R.id.second);
+
+        mPrepareTitle = (TextView) mPreparePanel.findViewById(R.id.title_text);
+        mPrepareTitle.setText(R.string.prepare_title);
+
+        mPrepareMin.setMaxValue(60);
+        mPrepareMin.setMinValue(0);
+        mPrepareMin.setWrapSelectorWheel(false);
+        setNumberPickerTextColor(this, mPrepareMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mPrepareMin, R.drawable.picker_divider);
+
+        mPrepareSecond.setMaxValue(60);
+        mPrepareSecond.setMinValue(0);
+        mPrepareSecond.setValue(20);
+        mPrepareSecond.setWrapSelectorWheel(false);
+        setNumberPickerTextColor(this, mPrepareSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mPrepareSecond, R.drawable.picker_divider);
+
+        mRestPanel = (View) findViewById(R.id.rest_time_picker);
+        mRestMin = (NumberPicker) mRestPanel.findViewById(R.id.min);
+        mRestSecond = (NumberPicker) mRestPanel.findViewById(R.id.second);
+
+        mRestTitle = (TextView) mRestPanel.findViewById(R.id.title_text);
+        mRestTitle.setText(R.string.rest_title);
+
+        mRestMin.setMaxValue(60);
+        mRestMin.setMinValue(0);
+        mRestMin.setWrapSelectorWheel(false);
+        setNumberPickerTextColor(this, mRestMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mRestMin, R.drawable.picker_divider);
+
+        mRestSecond.setMaxValue(60);
+        mRestSecond.setMinValue(0);
+        mRestSecond.setValue(30);
+        mRestSecond.setWrapSelectorWheel(false);
+        setNumberPickerTextColor(this, mRestSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mRestSecond, R.drawable.picker_divider);
     }
 
     public static boolean setNumberPickerTextColor(Context context, NumberPicker numberPicker, int color, int textSize) {

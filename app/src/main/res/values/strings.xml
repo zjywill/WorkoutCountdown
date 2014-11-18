@@ -11,4 +11,6 @@
     <string name="total_title">TOTAL</string>
     <string name="remaining_title">REMAINING</string>
     <string name="start">START</string>
+    <string name="minute">MIN</string>
+    <string name="second">SEC</string>
 </resources>
