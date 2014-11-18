@@ -13,7 +13,7 @@ public class MainActivity extends Activity {
     private RecyclerView.ItemDecoration mItemDecoration;
     private ListCardAdapter mAdapter;
 
-    private String[] mData = {"a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b"};
+    private String[] mData = {"00:00","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

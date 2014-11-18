@@ -22,7 +22,6 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.info_text);
         }
     }
 
@@ -48,7 +47,6 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
 
     }
 
