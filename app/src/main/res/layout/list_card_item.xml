@@ -56,24 +56,29 @@
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="36dp"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/card_divider"
-                android:layout_marginRight="3dp"
-                android:background="@null"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:layout_marginTop="6dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:text="@string/start"
                 android:textColor="@color/orange_500"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="36dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/card_divider"
-                android:src="@drawable/ic_action_edit"
-                android:scaleType="fitCenter"
+                android:layout_marginBottom="6dp"
                 android:layout_marginLeft="16dp"
-                android:background="@null"
+                android:layout_marginTop="6dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_edit"
                 android:textColor="@color/orange_500"
                 android:textSize="14sp" />
 

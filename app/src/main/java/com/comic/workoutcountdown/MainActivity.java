@@ -1,6 +1,7 @@
 package com.comic.workoutcountdown;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +48,9 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_add: {
                 Loge.d("Action add clicked");
+                Intent intent = new Intent();
+                intent.setClass(this,EditActivity.class);
+                startActivity(intent);
             }
             break;
         }
