@@ -65,7 +65,6 @@ public class CountdownActivity extends Activity {
                             long step = tick - mRemainTime - 1;
                             long restep = mCountdownData.getPrepareTime() - step;
                             Loge.d("MainTimer PREPARATION onTick step: " + step);
-                            Loge.d("MainTimer PREPARATION onTick restep: " + restep);
                             if (restep >= 0 && step >= 0) {
                                 mRoundProgress.setProgress((int) restep);
 
@@ -84,7 +83,6 @@ public class CountdownActivity extends Activity {
                             long step = tick - mRemainTime - 1;
                             long restep = mCountdownData.getWorkoutTime() - step;
                             Loge.d("MainTimer WORKOUT onTick step: " + step);
-                            Loge.d("MainTimer WORKOUT onTick restep: " + restep);
 
                             if (restep >= 0 && step >= 0) {
                                 mRoundProgress.setProgress((int) restep);
@@ -178,9 +176,6 @@ public class CountdownActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mMainTimer != null) {
-            mMainTimer.cancel();
-        }
     }
 
     @Override
@@ -191,5 +186,8 @@ public class CountdownActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mMainTimer != null) {
+            mMainTimer.cancel();
+        }
     }
 }
