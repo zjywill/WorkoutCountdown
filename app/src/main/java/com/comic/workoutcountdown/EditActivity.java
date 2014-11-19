@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.comic.workoutcountdown.utils.DatabaseUtils;
 import com.comic.workoutcountdown.utils.Utils;
 
 import java.lang.reflect.Field;
@@ -71,7 +72,7 @@ public class EditActivity extends Activity {
         setNumberPickerTextColor(this, mWorkoutMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mWorkoutMin, R.drawable.picker_divider);
 
-        mWorkoutSecond.setMaxValue(60);
+        mWorkoutSecond.setMaxValue(59);
         mWorkoutSecond.setMinValue(0);
         mWorkoutSecond.setWrapSelectorWheel(false);
         mWorkoutSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -93,7 +94,7 @@ public class EditActivity extends Activity {
         setNumberPickerTextColor(this, mPrepareMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mPrepareMin, R.drawable.picker_divider);
 
-        mPrepareSecond.setMaxValue(60);
+        mPrepareSecond.setMaxValue(59);
         mPrepareSecond.setMinValue(0);
         mPrepareSecond.setValue(20);
         mPrepareSecond.setWrapSelectorWheel(false);
@@ -115,7 +116,7 @@ public class EditActivity extends Activity {
         setNumberPickerTextColor(this, mRestMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mRestMin, R.drawable.picker_divider);
 
-        mRestSecond.setMaxValue(60);
+        mRestSecond.setMaxValue(59);
         mRestSecond.setMinValue(0);
         mRestSecond.setValue(30);
         mRestSecond.setWrapSelectorWheel(false);
@@ -162,11 +163,38 @@ public class EditActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
+                getValuesAndSave();
                 this.finish();
             }
             break;
         }
         return true;
+    }
+
+    private void getValuesAndSave() {
+
+        final long workoutTime = mWorkoutMin.getValue() * 60 + mWorkoutSecond.getValue();
+        final long prepareTime = mPrepareMin.getValue() * 60 + mPrepareSecond.getValue();
+        final long restTime = mRestMin.getValue() * 60 + mRestSecond.getValue();
+        final int sets = mSetPicker.getValue();
+        final int repets = mRepetPicker.getValue();
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CountdownData countdownData = new CountdownData();
+                countdownData.setWorkoutTime(workoutTime);
+                countdownData.setPrepareTime(prepareTime);
+                countdownData.setRestTime(restTime);
+                countdownData.setSets(sets);
+                countdownData.setRepets(repets);
+                countdownData.setCreateTime(System.currentTimeMillis());
+
+                DatabaseUtils.saveCountdown(EditActivity.this, countdownData);
+
+            }
+        }).start();
     }
 
     public static boolean setNumberPickerTextColor(Context context, NumberPicker numberPicker, int color, int textSize) {

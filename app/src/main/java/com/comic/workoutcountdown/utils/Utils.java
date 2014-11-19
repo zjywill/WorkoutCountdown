@@ -12,4 +12,23 @@ public class Utils {
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return ((int) (dimen * dm.density));
     }
+
+    public static String formatTimeText(long time) {
+        String timeText = "";
+        long min = time / 60;
+        if (min < 10) {
+            timeText = timeText + "0" + min;
+        } else {
+            timeText = timeText + min;
+        }
+        timeText = timeText + ":";
+        long second = time % 60;
+        if (second < 10) {
+            timeText = timeText + "0" + second;
+        } else {
+            timeText = timeText + second;
+        }
+
+        return timeText;
+    }
 }

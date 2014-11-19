@@ -2,11 +2,17 @@ package com.comic.workoutcountdown;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.comic.workoutcountdown.utils.DatabaseUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -15,8 +21,7 @@ public class MainActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
     private ListCardAdapter mAdapter;
-
-    private String[] mData = {"00:00", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b"};
+    private List<CountdownData> mDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +37,10 @@ public class MainActivity extends Activity {
         mItemDecoration = new DividerDecoration(this);
         mRecyclerView.addItemDecoration(mItemDecoration);
 
-        mAdapter = new ListCardAdapter(this, mData);
+        mAdapter = new ListCardAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        new GetDataTask().execute();
     }
 
     @Override
@@ -49,7 +55,7 @@ public class MainActivity extends Activity {
             case R.id.action_add: {
                 Loge.d("Action add clicked");
                 Intent intent = new Intent();
-                intent.setClass(this,EditActivity.class);
+                intent.setClass(this, EditActivity.class);
                 startActivity(intent);
             }
             break;
@@ -70,5 +76,26 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    class GetDataTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if (mDataset == null) {
+                mDataset = new ArrayList<CountdownData>();
+            }
+            mDataset.addAll(DatabaseUtils.getCountDownData(MainActivity.this));
+            return mDataset.size() > 0 ? "ok" : "fail";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s.equals("ok")) {
+                mAdapter.setData(mDataset);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

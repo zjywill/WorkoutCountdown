@@ -78,8 +78,8 @@
                 android:layout_marginBottom="6dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="6dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:scaleType="fitCenter"
-                android:background="@null"
                 android:src="@drawable/ic_action_discard"
                 android:textColor="@color/orange_500" />
 

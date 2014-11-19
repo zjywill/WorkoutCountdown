@@ -14,4 +14,7 @@
     <string name="start">START</string>
     <string name="minute">MIN</string>
     <string name="second">SEC</string>
+    <string name="pause">PAUSE</string>
+    <string name="stop">STOP</string>
+    <string name="resume">RESUME</string>
 </resources>

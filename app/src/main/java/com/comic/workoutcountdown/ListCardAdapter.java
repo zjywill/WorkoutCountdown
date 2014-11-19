@@ -1,18 +1,28 @@
 package com.comic.workoutcountdown;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.comic.workoutcountdown.utils.Utils;
+
+import java.util.List;
 
 /**
  * Created by zjy on 11/17/14.
  */
 public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private List<CountdownData> mDataset;
     private Context mContext;
 
     // Provide a reference to the views for each data item
@@ -31,6 +41,10 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
         public TextView mRestTitleTextView;
         public TextView mRestTimeTextView;
 
+        public ImageButton mDeleteButton;
+        public ImageButton mEditButton;
+        public Button mStartButton;
+
 
         public ViewHolder(View v) {
             super(v);
@@ -46,13 +60,19 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
             mRestTitleTextView.setText(R.string.rest_title);
             mRestTimeTextView = (TextView) mRestPanel.findViewById(R.id.text_small_content);
 
+            mEditButton = (ImageButton) v.findViewById(R.id.edit_button);
+            mDeleteButton = (ImageButton) v.findViewById(R.id.delete_button);
+            mStartButton = (Button) v.findViewById(R.id.start_button);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListCardAdapter(Context context, String[] myDataset) {
+    public ListCardAdapter(Context context) {
         mContext = context;
-        mDataset = myDataset;
+    }
+
+    public void setData(List<CountdownData> data) {
+        mDataset = data;
     }
 
     // Create new views (invoked by the layout manager)
@@ -72,11 +92,42 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
+        if (mDataset != null && holder != null && mDataset.size() > position) {
+            final CountdownData itemData = mDataset.get(position);
+
+            holder.mWorkoutTimeTextView.setText(Utils.formatTimeText(itemData.getWorkoutTime()));
+            holder.mRestTimeTextView.setText(Utils.formatTimeText(itemData.getRestTime()));
+            holder.mPrepareTimeTextView.setText(Utils.formatTimeText(itemData.getPrepareTime()));
+
+            holder.mStartButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, CountdownActivity.class);
+                    putData(intent, itemData);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void putData(Intent intent, CountdownData countdownData) {
+        if (intent != null) {
+            intent.putExtra(CountdownData.KEY_TIMER_ID, countdownData.getId());
+            intent.putExtra(CountdownData.KEY_TIMER_WORKOUT_NAME, countdownData.getName());
+            intent.putExtra(CountdownData.KEY_TIMER_WORKOUT_TIME, countdownData.getWorkoutTime());
+            intent.putExtra(CountdownData.KEY_TIMER_PREPARE_TIME, countdownData.getPrepareTime());
+            intent.putExtra(CountdownData.KEY_TIMER_REST_TIME, countdownData.getRestTime());
+            intent.putExtra(CountdownData.KEY_TIMER_SETS, countdownData.getSets());
+            intent.putExtra(CountdownData.KEY_TIMER_REPET, countdownData.getRepets());
+            intent.putExtra(CountdownData.KEY_TIMER_CREATE_DATE, countdownData.getCreateTime());
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset != null ? mDataset.size() : 0;
     }
 }

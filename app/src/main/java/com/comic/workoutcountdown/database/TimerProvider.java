@@ -33,13 +33,15 @@ public class TimerProvider extends ContentProvider {
     public static final String KEY_TIMER_WORKOUT_TIME = "workout";
     public static final String KEY_TIMER_REST_TIME = "rest";
     public static final String KEY_TIMER_PREPARE_TIME = "prepare";
-    public static final String KEY_TIMER_SET = "set";
+    public static final String KEY_TIMER_SETS = "sets";
     public static final String KEY_TIMER_REPET = "repet";
-    public static final String KEY_TIMER_CREATE_DATE = "create";
+    public static final String KEY_TIMER_CREATE_DATE = "create_time";
 
     @Override
     public boolean onCreate() {
-        return false;
+        Context context = getContext();
+        mOpenHelper = new MySQLiteOpenHelper(context);
+        return true;
     }
 
     @Override
@@ -160,7 +162,7 @@ public class TimerProvider extends ContentProvider {
                     + KEY_TIMER_WORKOUT_TIME + " INTEGER NOT NULL DEFAULT 0,"//
                     + KEY_TIMER_REST_TIME + " INTEGER NOT NULL DEFAULT 0,"//
                     + KEY_TIMER_PREPARE_TIME + " INTEGER NOT NULL DEFAULT 0,"//
-                    + KEY_TIMER_SET + " INTEGER NOT NULL DEFAULT 0,"//
+                    + KEY_TIMER_SETS + " INTEGER NOT NULL DEFAULT 0,"//
                     + KEY_TIMER_REPET + " INTEGER NOT NULL DEFAULT 0,"//
                     + KEY_TIMER_CREATE_DATE + " INTEGER NOT NULL DEFAULT 0"//
                     + ");";
