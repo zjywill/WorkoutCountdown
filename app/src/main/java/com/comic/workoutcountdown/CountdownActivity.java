@@ -13,6 +13,10 @@ import com.comic.workoutcountdown.utils.Utils;
  */
 public class CountdownActivity extends Activity {
 
+    private final static int PREPARATION = 1;
+    private final static int WORKOUT = 2;
+    private final static int REST = 3;
+
     private CountdownData mCountdownData;
 
     private RoundProgress mRoundProgress;
@@ -25,34 +29,101 @@ public class CountdownActivity extends Activity {
     private int mRestColor;
 
     private long mTotalTime;
+    private long mTotalTimePlus;
 
-    private CountDownTimer mPrepareTimer;
-    private CountDownTimer mWorkoutTimer;
-    private CountDownTimer mRestTimer;
+    private CountDownTimer mMainTimer;
+
+    private int mCurrentStatus;
+
+    private long mRemainTime;
+    private int mCurrentSet;
+    private int mCuttentRepet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.count_page);
+        mCurrentStatus = PREPARATION;
         getExtraData();
         initRes();
         initViews();
 
         mTotalTimeText.setText(Utils.formatTimeText(mTotalTime));
 
+
         if (mCountdownData != null) {
-            mRoundProgress.setMaxProgress((int) mCountdownData.getPrepareTime() - 2);
-            mRoundProgress.setRingColor(mPrepareColor);
+            restProgress(mPrepareColor, (int) mCountdownData.getPrepareTime(), R.string.prepare_title);
+            mRemainTime = mTotalTime - mCountdownData.getPrepareTime();
 
-            mPrepareTimer = new CountDownTimer(mCountdownData.getPrepareTime() * 1000, 1000) {
-
+            mMainTimer = new CountDownTimer(mTotalTimePlus * 1000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    long step = millisUntilFinished / 1000;
-                    int timePass = (int) (mCountdownData.getPrepareTime() - step - 1);
-                    Loge.d("PrepareTimer onTick: " + timePass);
-                    mRoundProgress.setProgress(timePass);
-                    mCurrentRemain.setText(Utils.formatTimeText(timePass));
+                    long tick = millisUntilFinished / 1000;
+                    mTotalTimeText.setText(Utils.formatTimeText(tick - 1));
+                    switch (mCurrentStatus) {
+                        case PREPARATION: {
+                            long step = tick - mRemainTime - 1;
+                            long restep = mCountdownData.getPrepareTime() - step;
+                            Loge.d("MainTimer PREPARATION onTick step: " + step);
+                            Loge.d("MainTimer PREPARATION onTick restep: " + restep);
+                            if (restep >= 0 && step >= 0) {
+                                mRoundProgress.setProgress((int) restep);
+
+                                if (step == 0) {
+                                    mCurrentStatus = WORKOUT;
+                                    mRemainTime -= mCountdownData.getWorkoutTime();
+                                    restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
+                                    mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
+                                } else {
+                                    mCurrentRemain.setText(Utils.formatTimeText(step));
+                                }
+                            }
+                        }
+                        break;
+                        case WORKOUT: {
+                            long step = tick - mRemainTime - 1;
+                            long restep = mCountdownData.getWorkoutTime() - step;
+                            Loge.d("MainTimer WORKOUT onTick step: " + step);
+                            Loge.d("MainTimer WORKOUT onTick restep: " + restep);
+
+                            if (restep >= 0 && step >= 0) {
+                                mRoundProgress.setProgress((int) restep);
+
+                                if (step == 0) {
+                                    mCurrentStatus = REST;
+                                    mRemainTime -= mCountdownData.getRestTime();
+                                    restProgress(mRestColor, (int) mCountdownData.getRestTime(), R.string.rest_title);
+                                    mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getRestTime()));
+                                } else {
+                                    mCurrentRemain.setText(Utils.formatTimeText(step));
+                                }
+                            }
+                        }
+                        break;
+                        case REST: {
+
+                            long step = tick - mRemainTime - 1;
+                            long restep = mCountdownData.getRestTime() - step;
+                            Loge.d("MainTimer WORKOUT onTick step: " + step);
+                            Loge.d("MainTimer WORKOUT onTick restep: " + restep);
+
+                            if (restep >= 0 && step >= 0) {
+                                mCurrentRemain.setText(Utils.formatTimeText(step));
+                                mRoundProgress.setProgress((int) restep);
+
+                                if (step == 0) {
+                                    mCurrentStatus = WORKOUT;
+                                    mRemainTime -= mCountdownData.getWorkoutTime();
+                                    restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
+                                    mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
+                                } else {
+                                    mCurrentRemain.setText(Utils.formatTimeText(step));
+                                }
+                            }
+
+                        }
+                        break;
+                    }
                 }
 
                 @Override
@@ -60,8 +131,15 @@ public class CountdownActivity extends Activity {
                 }
             };
             mRoundProgress.setProgress(0);
-            mPrepareTimer.start();
+            mMainTimer.start();
         }
+    }
+
+    private void restProgress(int color, int maxProgress, int titleId) {
+        mRoundProgress.setMaxProgress(maxProgress);
+        mRoundProgress.setRingColor(color);
+        mRoundProgress.setProgress(0);
+        mCurrentTitle.setText(titleId);
     }
 
     private void getExtraData() {
@@ -79,6 +157,7 @@ public class CountdownActivity extends Activity {
             mCountdownData.printData();
 
             mTotalTime = mCountdownData.getPrepareTime() + (mCountdownData.getWorkoutTime() + mCountdownData.getRestTime()) * mCountdownData.getSets() * mCountdownData.getRepets();
+            mTotalTimePlus = mTotalTime + 2;
         }
     }
 
@@ -99,6 +178,9 @@ public class CountdownActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (mMainTimer != null) {
+            mMainTimer.cancel();
+        }
     }
 
     @Override
