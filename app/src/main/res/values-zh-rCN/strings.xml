@@ -3,6 +3,7 @@
 
     <string name="app_name">计时器</string>
     <string name="action_add">添加</string>
+    <string name="action_save">保存</string>
     <string name="workout_title">训练</string>
     <string name="prepare_title">准备</string>
     <string name="rest_title">休息</string>

@@ -23,6 +23,14 @@
             android:id="@+id/rest_time_picker"
             layout="@layout/time_pick_panel" />
 
+        <include
+            android:id="@+id/set_picker"
+            layout="@layout/count_choose_panel" />
+
+        <include
+            android:id="@+id/repet_picker"
+            layout="@layout/count_choose_panel" />
+
 
     </LinearLayout>
 </ScrollView>

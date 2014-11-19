@@ -3,6 +3,7 @@
 
     <string name="app_name">Countdown</string>
     <string name="action_add">Add</string>
+    <string name="action_save">Save</string>
     <string name="workout_title">WORKOUT</string>
     <string name="prepare_title">PREPARATION</string>
     <string name="rest_title">REST</string>

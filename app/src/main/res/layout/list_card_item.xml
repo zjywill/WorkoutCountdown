@@ -61,9 +61,9 @@
                 android:layout_below="@id/card_divider"
                 android:layout_marginBottom="6dp"
                 android:layout_marginRight="8dp"
-                android:gravity="center"
                 android:layout_marginTop="6dp"
                 android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
                 android:text="@string/start"
                 android:textColor="@color/orange_500"
                 android:textSize="16sp" />
@@ -78,9 +78,8 @@
                 android:layout_marginTop="6dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="@color/orange_500"
-                android:textSize="14sp" />
+                android:src="@drawable/ic_action_discard"
+                android:textColor="@color/orange_500" />
 
 
         </RelativeLayout>

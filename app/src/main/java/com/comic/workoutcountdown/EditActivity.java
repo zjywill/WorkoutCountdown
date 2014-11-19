@@ -2,9 +2,12 @@ package com.comic.workoutcountdown;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -34,6 +37,14 @@ public class EditActivity extends Activity {
     private NumberPicker mRestMin;
     private NumberPicker mRestSecond;
 
+    private View mSetPanel;
+    private TextView mSetTitle;
+    private NumberPicker mSetPicker;
+
+    private View mRepetPanel;
+    private TextView mRepetTitle;
+    private NumberPicker mRepetPicker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +67,14 @@ public class EditActivity extends Activity {
         mWorkoutMin.setMinValue(0);
         mWorkoutMin.setValue(1);
         mWorkoutMin.setWrapSelectorWheel(false);
+        mWorkoutMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mWorkoutMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mWorkoutMin, R.drawable.picker_divider);
 
         mWorkoutSecond.setMaxValue(60);
         mWorkoutSecond.setMinValue(0);
         mWorkoutSecond.setWrapSelectorWheel(false);
+        mWorkoutSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mWorkoutSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mWorkoutSecond, R.drawable.picker_divider);
 
@@ -76,6 +89,7 @@ public class EditActivity extends Activity {
         mPrepareMin.setMaxValue(60);
         mPrepareMin.setMinValue(0);
         mPrepareMin.setWrapSelectorWheel(false);
+        mPrepareMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mPrepareMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mPrepareMin, R.drawable.picker_divider);
 
@@ -83,6 +97,7 @@ public class EditActivity extends Activity {
         mPrepareSecond.setMinValue(0);
         mPrepareSecond.setValue(20);
         mPrepareSecond.setWrapSelectorWheel(false);
+        mPrepareSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mPrepareSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mPrepareSecond, R.drawable.picker_divider);
 
@@ -96,6 +111,7 @@ public class EditActivity extends Activity {
         mRestMin.setMaxValue(60);
         mRestMin.setMinValue(0);
         mRestMin.setWrapSelectorWheel(false);
+        mRestMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mRestMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mRestMin, R.drawable.picker_divider);
 
@@ -103,8 +119,54 @@ public class EditActivity extends Activity {
         mRestSecond.setMinValue(0);
         mRestSecond.setValue(30);
         mRestSecond.setWrapSelectorWheel(false);
+        mRestSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mRestSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
         setNumberDivider(this, mRestSecond, R.drawable.picker_divider);
+
+        mSetPanel = (View) findViewById(R.id.set_picker);
+        mSetTitle = (TextView) mSetPanel.findViewById(R.id.title_text);
+        mSetPicker = (NumberPicker) mSetPanel.findViewById(R.id.times);
+
+        mSetTitle.setText(R.string.sets_title);
+
+        mSetPicker.setMaxValue(100);
+        mSetPicker.setMinValue(0);
+        mSetPicker.setValue(8);
+        mSetPicker.setWrapSelectorWheel(false);
+        mSetPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        setNumberPickerTextColor(this, mSetPicker, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mSetPicker, R.drawable.picker_divider);
+
+        mRepetPanel = (View) findViewById(R.id.repet_picker);
+        mRepetTitle = (TextView) mRepetPanel.findViewById(R.id.title_text);
+        mRepetPicker = (NumberPicker) mRepetPanel.findViewById(R.id.times);
+
+        mRepetTitle.setText(R.string.repetitions_title);
+
+        mRepetPicker.setMaxValue(100);
+        mRepetPicker.setMinValue(0);
+        mRepetPicker.setValue(1);
+        mRepetPicker.setWrapSelectorWheel(false);
+        mRepetPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        setNumberPickerTextColor(this, mRepetPicker, getResources().getColor(R.color.primary_text_default_material_light), 30);
+        setNumberDivider(this, mRepetPicker, R.drawable.picker_divider);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save: {
+                this.finish();
+            }
+            break;
+        }
+        return true;
     }
 
     public static boolean setNumberPickerTextColor(Context context, NumberPicker numberPicker, int color, int textSize) {
