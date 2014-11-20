@@ -55,6 +55,8 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
 
     private Vibrator mVibrator;
 
+    private FinishDialog mFinishDialog = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +157,12 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                 if (mMainTimer != null) {
                     mMainTimer.cancel();
                 }
+
+                if (mFinishDialog == null) {
+                    mFinishDialog = new FinishDialog(this, R.string.stop_dialog_content);
+                }
+                mFinishDialog.setContentText(R.string.stop_dialog_content);
+                mFinishDialog.show();
             }
             break;
         }
@@ -271,6 +279,13 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                                 } else {
                                     mSetText.setText(getString(R.string.sets_count, mCurrentSet));
                                     mCurrentTitle.setText(R.string.finish);
+
+
+                                    if (mFinishDialog == null) {
+                                        mFinishDialog = new FinishDialog(CountdownActivity.this, R.string.finish_dialog_content);
+                                    }
+                                    mFinishDialog.setContentText(R.string.finish_dialog_content);
+                                    mFinishDialog.show();
                                 }
                                 vibrateLong();
                             } else {

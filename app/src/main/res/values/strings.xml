@@ -20,4 +20,6 @@
     <string name="repetitions_count">REPEAT:<xliff:g>%d</xliff:g></string>
     <string name="sets_count">SET:<xliff:g>%d</xliff:g></string>
     <string name="finish">FINISH</string>
+    <string name="stop_dialog_content">Stop Countdown</string>
+    <string name="finish_dialog_content">Task Finish</string>
 </resources>

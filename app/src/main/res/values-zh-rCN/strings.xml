@@ -20,4 +20,6 @@
     <string name="repetitions_count">重复:<xliff:g>%d</xliff:g></string>
     <string name="sets_count">组:<xliff:g>%d</xliff:g></string>
     <string name="finish">完成</string>
+    <string name="stop_dialog_content">停止计时</string>
+    <string name="finish_dialog_content">活动完成</string>
 </resources>
