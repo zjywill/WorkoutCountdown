@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.comic.workoutcountdown.utils.DatabaseUtils;
 import com.comic.workoutcountdown.utils.Utils;
 
 import java.util.List;
@@ -109,6 +110,27 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
                     mContext.startActivity(intent);
                 }
             });
+
+
+            holder.mEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, EditActivity.class);
+                    putData(intent, itemData);
+                    mContext.startActivity(intent);
+                }
+            });
+
+
+            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseUtils.deleteCountdownData(mContext, itemData.getId());
+                    ((MainActivity) mContext).refresh();
+                }
+            });
+
         }
     }
 

@@ -56,11 +56,22 @@ public class MainActivity extends Activity {
                 Loge.d("Action add clicked");
                 Intent intent = new Intent();
                 intent.setClass(this, EditActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
             break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == 1) {
+            new GetDataTask().execute();
+        }
+    }
+
+    public void refresh() {
+        new GetDataTask().execute();
     }
 
     @Override
@@ -85,6 +96,7 @@ public class MainActivity extends Activity {
             if (mDataset == null) {
                 mDataset = new ArrayList<CountdownData>();
             }
+            mDataset.clear();
             mDataset.addAll(DatabaseUtils.getCountDownData(MainActivity.this));
             return mDataset.size() > 0 ? "ok" : "fail";
         }

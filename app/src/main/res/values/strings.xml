@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
     <string name="app_name">Countdown</string>
     <string name="action_add">Add</string>
@@ -17,4 +17,7 @@
     <string name="pause">PAUSE</string>
     <string name="stop">STOP</string>
     <string name="resume">RESUME</string>
+    <string name="repetitions_count">REPEAT:<xliff:g>%d</xliff:g></string>
+    <string name="sets_count">SET:<xliff:g>%d</xliff:g></string>
+    <string name="finish">FINISH</string>
 </resources>

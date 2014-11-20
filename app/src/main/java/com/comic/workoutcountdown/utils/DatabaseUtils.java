@@ -78,4 +78,19 @@ public class DatabaseUtils {
 
         return countdowns;
     }
+
+    public static boolean deleteCountdownData(Context context, long id) {
+        if (context != null) {
+            ContentResolver contentResolver = context.getContentResolver();
+            if (contentResolver != null) {
+                String where = TimerProvider.KEY_TIMER_ID + "= ?";
+                String[] whereArgs = {String.valueOf(id)};
+                contentResolver.delete(TimerProvider.CONTENT_URI_TIMER, where, whereArgs);
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 }

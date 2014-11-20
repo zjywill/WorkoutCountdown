@@ -46,12 +46,40 @@ public class EditActivity extends Activity {
     private TextView mRepetTitle;
     private NumberPicker mRepetPicker;
 
+    private CountdownData mCountdownData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_page);
+        getExtraData();
         initViews();
+    }
+
+    private void getExtraData() {
+        Intent extra = getIntent();
+        mCountdownData = new CountdownData();
+        if (extra != null) {
+            mCountdownData.setId(extra.getLongExtra(CountdownData.KEY_TIMER_ID, 0));
+            mCountdownData.setName(extra.getStringExtra(CountdownData.KEY_TIMER_WORKOUT_NAME));
+            mCountdownData.setWorkoutTime(extra.getLongExtra(CountdownData.KEY_TIMER_WORKOUT_TIME, 60));
+            mCountdownData.setPrepareTime(extra.getLongExtra(CountdownData.KEY_TIMER_PREPARE_TIME, 20));
+            mCountdownData.setRestTime(extra.getLongExtra(CountdownData.KEY_TIMER_REST_TIME, 30));
+            mCountdownData.setSets(extra.getIntExtra(CountdownData.KEY_TIMER_SETS, 8));
+            mCountdownData.setRepets(extra.getIntExtra(CountdownData.KEY_TIMER_REPET, 1));
+            mCountdownData.setCreateTime(extra.getLongExtra(CountdownData.KEY_TIMER_CREATE_DATE, 0));
+        } else {
+            mCountdownData.setId(0);
+            mCountdownData.setName("");
+            mCountdownData.setWorkoutTime(60);
+            mCountdownData.setPrepareTime(20);
+            mCountdownData.setRestTime(30);
+            mCountdownData.setSets(8);
+            mCountdownData.setRepets(1);
+            mCountdownData.setCreateTime(0);
+        }
+        mCountdownData.printData();
     }
 
 
@@ -66,7 +94,7 @@ public class EditActivity extends Activity {
 
         mWorkoutMin.setMaxValue(60);
         mWorkoutMin.setMinValue(0);
-        mWorkoutMin.setValue(1);
+        mWorkoutMin.setValue((int) mCountdownData.getWorkoutTime() / 60);
         mWorkoutMin.setWrapSelectorWheel(false);
         mWorkoutMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mWorkoutMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -74,6 +102,7 @@ public class EditActivity extends Activity {
 
         mWorkoutSecond.setMaxValue(59);
         mWorkoutSecond.setMinValue(0);
+        mWorkoutSecond.setValue((int) mCountdownData.getWorkoutTime() % 60);
         mWorkoutSecond.setWrapSelectorWheel(false);
         mWorkoutSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mWorkoutSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -89,6 +118,7 @@ public class EditActivity extends Activity {
 
         mPrepareMin.setMaxValue(60);
         mPrepareMin.setMinValue(0);
+        mPrepareMin.setValue((int) mCountdownData.getPrepareTime() / 60);
         mPrepareMin.setWrapSelectorWheel(false);
         mPrepareMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mPrepareMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -96,7 +126,7 @@ public class EditActivity extends Activity {
 
         mPrepareSecond.setMaxValue(59);
         mPrepareSecond.setMinValue(0);
-        mPrepareSecond.setValue(20);
+        mPrepareSecond.setValue((int) mCountdownData.getPrepareTime() % 60);
         mPrepareSecond.setWrapSelectorWheel(false);
         mPrepareSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mPrepareSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -111,6 +141,7 @@ public class EditActivity extends Activity {
 
         mRestMin.setMaxValue(60);
         mRestMin.setMinValue(0);
+        mRestMin.setValue((int) mCountdownData.getRestTime() / 60);
         mRestMin.setWrapSelectorWheel(false);
         mRestMin.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mRestMin, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -118,7 +149,7 @@ public class EditActivity extends Activity {
 
         mRestSecond.setMaxValue(59);
         mRestSecond.setMinValue(0);
-        mRestSecond.setValue(30);
+        mRestSecond.setValue((int) mCountdownData.getRestTime() % 60);
         mRestSecond.setWrapSelectorWheel(false);
         mRestSecond.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mRestSecond, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -130,9 +161,9 @@ public class EditActivity extends Activity {
 
         mSetTitle.setText(R.string.sets_title);
 
-        mSetPicker.setMaxValue(100);
-        mSetPicker.setMinValue(0);
-        mSetPicker.setValue(8);
+        mSetPicker.setMaxValue(20);
+        mSetPicker.setMinValue(1);
+        mSetPicker.setValue(mCountdownData.getSets());
         mSetPicker.setWrapSelectorWheel(false);
         mSetPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mSetPicker, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -144,9 +175,9 @@ public class EditActivity extends Activity {
 
         mRepetTitle.setText(R.string.repetitions_title);
 
-        mRepetPicker.setMaxValue(100);
-        mRepetPicker.setMinValue(0);
-        mRepetPicker.setValue(1);
+        mRepetPicker.setMaxValue(20);
+        mRepetPicker.setMinValue(1);
+        mRepetPicker.setValue(mCountdownData.getRepets());
         mRepetPicker.setWrapSelectorWheel(false);
         mRepetPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         setNumberPickerTextColor(this, mRepetPicker, getResources().getColor(R.color.primary_text_default_material_light), 30);
@@ -164,6 +195,7 @@ public class EditActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_save: {
                 getValuesAndSave();
+                this.setResult(1);
                 this.finish();
             }
             break;
