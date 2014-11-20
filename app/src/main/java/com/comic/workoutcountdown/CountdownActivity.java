@@ -1,12 +1,15 @@
 package com.comic.workoutcountdown;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.comic.workoutcountdown.utils.SharedPreferencesUtils;
 import com.comic.workoutcountdown.utils.Utils;
 
 /**
@@ -39,6 +42,10 @@ public class CountdownActivity extends Activity {
     private long mRemainTime;
     private int mCurrentSet;
     private int mCuttentRepet;
+
+    private boolean mVibrationState;
+
+    private Vibrator mVibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,7 @@ public class CountdownActivity extends Activity {
                                     mRemainTime -= mCountdownData.getWorkoutTime();
                                     restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
                                     mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
+                                    vibrate();
                                 } else {
                                     mCurrentRemain.setText(Utils.formatTimeText(step));
                                 }
@@ -95,6 +103,7 @@ public class CountdownActivity extends Activity {
                                     mRemainTime -= mCountdownData.getRestTime();
                                     restProgress(mRestColor, (int) mCountdownData.getRestTime(), R.string.rest_title);
                                     mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getRestTime()));
+                                    vibrate();
                                 } else {
                                     mCurrentRemain.setText(Utils.formatTimeText(step));
                                 }
@@ -117,6 +126,7 @@ public class CountdownActivity extends Activity {
                                     mRemainTime -= mCountdownData.getWorkoutTime();
                                     restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
                                     mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
+                                    vibrate();
                                 } else {
                                     mCurrentRemain.setText(Utils.formatTimeText(step));
                                 }
@@ -170,6 +180,9 @@ public class CountdownActivity extends Activity {
     }
 
     private void initRes() {
+        mVibrationState = SharedPreferencesUtils.getVibration(this);
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         mPrepareColor = getResources().getColor(R.color.yellow_500);
         mWorkoutColor = getResources().getColor(R.color.green_500);
         mRestColor = getResources().getColor(R.color.red_500);
@@ -191,6 +204,12 @@ public class CountdownActivity extends Activity {
         super.onDestroy();
         if (mMainTimer != null) {
             mMainTimer.cancel();
+        }
+    }
+
+    private void vibrate() {
+        if (mVibrationState && mVibrator != null) {
+            mVibrator.vibrate(1000);
         }
     }
 }
