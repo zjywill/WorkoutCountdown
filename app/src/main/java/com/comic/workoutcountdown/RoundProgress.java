@@ -49,7 +49,6 @@ public class RoundProgress extends View {
     public void setRingColor(int ring_color) {
         mRingColor = ring_color;
         mRingPaint.setColor(mRingColor);
-        invalidate();
     }
 
     public void setProgress(int progress) {
@@ -59,7 +58,6 @@ public class RoundProgress extends View {
 
     public void setMaxProgress(int maxProgress) {
         mMaxProgress = maxProgress;
-        invalidate();
     }
 
     private void initRes() {

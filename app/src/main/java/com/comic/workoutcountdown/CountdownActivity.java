@@ -77,7 +77,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
             mRepetText.setText(getString(R.string.repetitions_count, mCuttentRepet));
             mSetText.setText(getString(R.string.sets_count, mCurrentSet));
 
-            restProgress(mPrepareColor, (int) mCountdownData.getPrepareTime(), R.string.prepare_title);
+            restProgress((int) mCountdownData.getPrepareTime(), R.string.prepare_title);
             mRemainTime = mTotalTime - mCountdownData.getPrepareTime();
 
             mMainTimer = new MyCountDownTimer(mTotalTimePlus * 1000, 1000);
@@ -86,10 +86,9 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    private void restProgress(int color, int maxProgress, int titleId) {
+    private void restProgress(int maxProgress, int titleId) {
         mRoundProgress.setMaxProgress(maxProgress);
-        mRoundProgress.setRingColor(color);
-        mRoundProgress.setProgress(0);
+        mRoundProgress.setProgress(maxProgress);
         mCurrentTitle.setText(titleId);
     }
 
@@ -212,16 +211,20 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
             mTotalTimeText.setText(Utils.formatTimeText(tick - 1));
             switch (mCurrentStatus) {
                 case PREPARATION: {
+                    mRoundProgress.setRingColor(mPrepareColor);
+
                     long step = tick - mRemainTime - 1;
                     long restep = mCountdownData.getPrepareTime() - step;
                     Loge.d("MainTimer PREPARATION onTick step: " + step);
+                    Loge.d("MainTimer PREPARATION onTick restep: " + restep);
+
                     if (restep >= 0 && step >= 0) {
                         mRoundProgress.setProgress((int) restep);
 
                         if (step == 0) {
                             mCurrentStatus = WORKOUT;
                             mRemainTime -= mCountdownData.getWorkoutTime();
-                            restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
+                            restProgress((int) mCountdownData.getWorkoutTime(), R.string.workout_title);
                             mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
                             vibrate();
                         } else {
@@ -231,9 +234,12 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                 }
                 break;
                 case WORKOUT: {
+                    mRoundProgress.setRingColor(mWorkoutColor);
+
                     long step = tick - mRemainTime - 1;
                     long restep = mCountdownData.getWorkoutTime() - step;
                     Loge.d("MainTimer WORKOUT onTick step: " + step);
+                    Loge.d("MainTimer WORKOUT onTick restep: " + restep);
 
                     if (restep >= 0 && step >= 0) {
                         mRoundProgress.setProgress((int) restep);
@@ -241,7 +247,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                         if (step == 0) {
                             mCurrentStatus = REST;
                             mRemainTime -= mCountdownData.getRestTime();
-                            restProgress(mRestColor, (int) mCountdownData.getRestTime(), R.string.rest_title);
+                            restProgress((int) mCountdownData.getRestTime(), R.string.rest_title);
                             mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getRestTime()));
                             vibrate();
                         } else {
@@ -252,10 +258,12 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                 break;
                 case REST: {
 
+                    mRoundProgress.setRingColor(mRestColor);
+
                     long step = tick - mRemainTime - 1;
                     long restep = mCountdownData.getRestTime() - step;
-                    Loge.d("MainTimer WORKOUT onTick step: " + step);
-                    Loge.d("MainTimer WORKOUT onTick restep: " + restep);
+                    Loge.d("MainTimer REST onTick step: " + step);
+                    Loge.d("MainTimer REST onTick restep: " + restep);
 
                     if (restep >= 0 && step >= 0) {
                         mCurrentRemain.setText(Utils.formatTimeText(step));
@@ -274,7 +282,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
 
                                     mCurrentStatus = PREPARATION;
                                     mRemainTime -= mCountdownData.getPrepareTime();
-                                    restProgress(mPrepareColor, (int) mCountdownData.getPrepareTime(), R.string.prepare_title);
+                                    restProgress((int) mCountdownData.getPrepareTime(), R.string.prepare_title);
                                     mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getPrepareTime()));
                                 } else {
                                     mSetText.setText(getString(R.string.sets_count, mCurrentSet));
@@ -292,7 +300,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                                 mSetText.setText(getString(R.string.sets_count, mCurrentSet));
                                 mCurrentStatus = WORKOUT;
                                 mRemainTime -= mCountdownData.getWorkoutTime();
-                                restProgress(mWorkoutColor, (int) mCountdownData.getWorkoutTime(), R.string.workout_title);
+                                restProgress((int) mCountdownData.getWorkoutTime(), R.string.workout_title);
                                 mCurrentRemain.setText(Utils.formatTimeText(mCountdownData.getWorkoutTime()));
                                 vibrate();
                             }
