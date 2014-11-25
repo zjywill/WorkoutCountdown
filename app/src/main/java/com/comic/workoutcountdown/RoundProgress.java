@@ -20,8 +20,8 @@ public class RoundProgress extends View {
     private float mRingSize;
     private float mStrokeSize;
 
-    private int mProgress;
-    private int mMaxProgress;
+    private long mProgress;
+    private long mMaxProgress;
 
     private Paint mRingPaint;
 
@@ -51,12 +51,12 @@ public class RoundProgress extends View {
         mRingPaint.setColor(mRingColor);
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(long progress) {
         mProgress = progress;
         invalidate();
     }
 
-    public void setMaxProgress(int maxProgress) {
+    public void setMaxProgress(long maxProgress) {
         mMaxProgress = maxProgress;
     }
 
@@ -87,7 +87,7 @@ public class RoundProgress extends View {
 
             float percent = ((float) mProgress / mMaxProgress);
             float angle = 360 * percent;
-
+            Loge.d("get percent: " + percent);
             mRingPaint.setStyle(Style.STROKE);
             canvas.drawArc(oval, -90, angle, false, mRingPaint);
 

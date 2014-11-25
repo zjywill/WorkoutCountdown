@@ -22,4 +22,5 @@
     <string name="finish">FINISH</string>
     <string name="stop_dialog_content">Stop Countdown</string>
     <string name="finish_dialog_content">Task Finish</string>
+    <string name="new_countdown">New Countdown</string>
 </resources>

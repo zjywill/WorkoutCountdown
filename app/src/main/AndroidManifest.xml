@@ -24,15 +24,12 @@
         <activity
             android:name="com.comic.workoutcountdown.EditActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"></activity>
+            android:label="@string/app_name"></activity>
 
         <activity
             android:name="com.comic.workoutcountdown.CountdownActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTask">
-        </activity>
+            android:label="@string/app_name"></activity>
 
         <provider
             android:name="com.comic.workoutcountdown.database.TimerProvider"

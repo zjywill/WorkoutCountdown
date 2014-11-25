@@ -194,8 +194,8 @@ public class EditActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
+                this.setResult(Activity.RESULT_OK);
                 getValuesAndSave();
-                this.setResult(1);
                 this.finish();
             }
             break;

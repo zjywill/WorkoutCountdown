@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.comic.workoutcountdown.utils.DatabaseUtils;
 
@@ -15,18 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.ItemDecoration mItemDecoration;
     private ListCardAdapter mAdapter;
+    private Button mNewButton;
     private List<CountdownData> mDataset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mNewButton = (Button) findViewById(R.id.new_button);
+        mNewButton.setOnClickListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.section_list);
         mRecyclerView.setHasFixedSize(true);
@@ -56,18 +62,26 @@ public class MainActivity extends Activity {
                 Loge.d("Action add clicked");
                 Intent intent = new Intent();
                 intent.setClass(this, EditActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1001);
             }
             break;
         }
         return true;
     }
 
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent();
+        intent.setClass(this, EditActivity.class);
+        startActivityForResult(intent, 1001);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == 1) {
-            new GetDataTask().execute();
-        }
+        Loge.d("requestCode: " + requestCode + " resultCode: " + resultCode);
+        refresh();
     }
 
     public void refresh() {
@@ -98,6 +112,7 @@ public class MainActivity extends Activity {
             }
             mDataset.clear();
             mDataset.addAll(DatabaseUtils.getCountDownData(MainActivity.this));
+            Loge.d("mDataset size: "+mDataset.size());
             return mDataset.size() > 0 ? "ok" : "fail";
         }
 
@@ -107,6 +122,12 @@ public class MainActivity extends Activity {
             if (s.equals("ok")) {
                 mAdapter.setData(mDataset);
                 mAdapter.notifyDataSetChanged();
+
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mNewButton.setVisibility(View.GONE);
+            } else {
+                mNewButton.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
             }
         }
     }

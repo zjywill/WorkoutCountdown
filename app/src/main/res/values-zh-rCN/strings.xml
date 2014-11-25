@@ -22,4 +22,5 @@
     <string name="finish">完成</string>
     <string name="stop_dialog_content">停止计时</string>
     <string name="finish_dialog_content">活动完成</string>
+    <string name="new_countdown">新建计时</string>
 </resources>
