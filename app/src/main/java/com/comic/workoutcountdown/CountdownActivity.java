@@ -3,6 +3,8 @@ package com.comic.workoutcountdown;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -56,6 +58,11 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
     private Vibrator mVibrator;
 
     private FinishDialog mFinishDialog = null;
+
+    private SoundPool mSoundPool;
+
+    private int mDiId;
+    private int mDongId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +139,10 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
         mPrepareColor = getResources().getColor(R.color.yellow_500);
         mWorkoutColor = getResources().getColor(R.color.green_500);
         mRestColor = getResources().getColor(R.color.red_500);
+
+        mSoundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        mDiId = mSoundPool.load(this, R.raw.di, 1);
+        mDongId = mSoundPool.load(this, R.raw.dong, 1);
     }
 
     @Override
@@ -188,12 +199,31 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
     private void vibrate() {
         if (mVibrationState && mVibrator != null) {
             mVibrator.vibrate(600);
+            playDong();
         }
     }
 
     private void vibrateLong() {
         if (mVibrationState && mVibrator != null) {
             mVibrator.vibrate(1200);
+            playDong();
+        }
+    }
+
+    private void playDi() {
+        if (mSoundPool != null) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            int volum = am.getStreamVolume(AudioManager.STREAM_SYSTEM);
+            mSoundPool.play(mDiId, volum, volum, 100, 0, 1);
+        }
+    }
+
+
+    private void playDong() {
+        if (mSoundPool != null) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            int volum = am.getStreamVolume(AudioManager.STREAM_SYSTEM);
+            mSoundPool.play(mDongId, volum, volum, 100, 0, 1);
         }
     }
 
@@ -217,10 +247,11 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                     long restep = mCountdownData.getPrepareTime() - step;
                     Loge.d("MainTimer PREPARATION onTick step: " + step);
                     Loge.d("MainTimer PREPARATION onTick restep: " + restep);
-
                     if (restep >= 0 && step >= 0) {
                         mRoundProgress.setProgress((int) restep);
-
+                        if (step > 0 && step < 5) {
+                            playDi();
+                        }
                         if (step == 0) {
                             mCurrentStatus = WORKOUT;
                             mRemainTime -= mCountdownData.getWorkoutTime();
@@ -235,7 +266,6 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                 break;
                 case WORKOUT: {
                     mRoundProgress.setRingColor(mWorkoutColor);
-
                     long step = tick - mRemainTime - 1;
                     long restep = mCountdownData.getWorkoutTime() - step;
                     Loge.d("MainTimer WORKOUT onTick step: " + step);
@@ -243,7 +273,9 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
 
                     if (restep >= 0 && step >= 0) {
                         mRoundProgress.setProgress((int) restep);
-
+                        if (step > 0 && step < 5) {
+                            playDi();
+                        }
                         if (step == 0) {
                             mCurrentStatus = REST;
                             mRemainTime -= mCountdownData.getRestTime();
@@ -268,11 +300,11 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
                     if (restep >= 0 && step >= 0) {
                         mCurrentRemain.setText(Utils.formatTimeText(step));
                         mRoundProgress.setProgress((int) restep);
-
+                        if (step > 0 && step < 5) {
+                            playDi();
+                        }
                         if (step == 0) {
-
                             mCurrentSet--;
-
                             if (mCurrentSet == 0) {
                                 mCuttentRepet--;
                                 mRepetText.setText(getString(R.string.repetitions_count, mCuttentRepet));
