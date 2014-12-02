@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import java.lang.reflect.Field;
  * Created by zjy on 11/18/14.
  */
 public class EditActivity extends Activity {
+
+    private EditText mNameEdit;
 
     private View mWorkoutPanel;
     private TextView mWorkoutTitle;
@@ -48,6 +52,8 @@ public class EditActivity extends Activity {
 
     private CountdownData mCountdownData;
 
+    private boolean mEdit = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,9 @@ public class EditActivity extends Activity {
         Intent extra = getIntent();
         mCountdownData = new CountdownData();
         if (extra != null) {
+            if (extra.hasExtra(CountdownData.KEY_TIMER_ID)) {
+                mEdit = true;
+            }
             mCountdownData.setId(extra.getLongExtra(CountdownData.KEY_TIMER_ID, 0));
             mCountdownData.setName(extra.getStringExtra(CountdownData.KEY_TIMER_WORKOUT_NAME));
             mCountdownData.setWorkoutTime(extra.getLongExtra(CountdownData.KEY_TIMER_WORKOUT_TIME, 60));
@@ -84,6 +93,11 @@ public class EditActivity extends Activity {
 
 
     private void initViews() {
+
+        mNameEdit = (EditText) findViewById(R.id.name_edit);
+        if (mCountdownData.getName() != null && mCountdownData.getName().length() > 0) {
+            mNameEdit.setText(mCountdownData.getName());
+        }
 
         mWorkoutPanel = (View) findViewById(R.id.workout_time_picker);
         mWorkoutMin = (NumberPicker) mWorkoutPanel.findViewById(R.id.min);
@@ -194,9 +208,14 @@ public class EditActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
-                this.setResult(Activity.RESULT_OK);
                 getValuesAndSave();
-                this.finish();
+                this.setResult(Activity.RESULT_OK);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditActivity.this.finish();
+                    }
+                }, 200);
             }
             break;
         }
@@ -205,17 +224,19 @@ public class EditActivity extends Activity {
 
     private void getValuesAndSave() {
 
+        final String name = mNameEdit.getText().toString();
         final long workoutTime = mWorkoutMin.getValue() * 60 + mWorkoutSecond.getValue();
         final long prepareTime = mPrepareMin.getValue() * 60 + mPrepareSecond.getValue();
         final long restTime = mRestMin.getValue() * 60 + mRestSecond.getValue();
         final int sets = mSetPicker.getValue();
         final int repets = mRepetPicker.getValue();
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 CountdownData countdownData = new CountdownData();
+                countdownData.setId(mCountdownData.getId());
+                countdownData.setName(name);
                 countdownData.setWorkoutTime(workoutTime);
                 countdownData.setPrepareTime(prepareTime);
                 countdownData.setRestTime(restTime);
@@ -223,8 +244,11 @@ public class EditActivity extends Activity {
                 countdownData.setRepets(repets);
                 countdownData.setCreateTime(System.currentTimeMillis());
 
-                DatabaseUtils.saveCountdown(EditActivity.this, countdownData);
-
+                if (mEdit) {
+                    DatabaseUtils.updateCountdown(EditActivity.this, countdownData);
+                } else {
+                    DatabaseUtils.saveCountdown(EditActivity.this, countdownData);
+                }
             }
         }).start();
     }

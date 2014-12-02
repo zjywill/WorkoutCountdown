@@ -31,6 +31,7 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
+        public TextView mWorkoutTitleTextView;
         public TextView mWorkoutTimeTextView;
 
         private View mPreparePanel;
@@ -49,6 +50,7 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
+            mWorkoutTitleTextView = (TextView) v.findViewById(R.id.text_big_title);
             mWorkoutTimeTextView = (TextView) v.findViewById(R.id.text_big_content);
 
             mPreparePanel = (View) v.findViewById(R.id.prepare_text);
@@ -97,6 +99,7 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
         if (mDataset != null && holder != null && mDataset.size() > position) {
             final CountdownData itemData = mDataset.get(position);
 
+            holder.mWorkoutTitleTextView.setText(itemData.getName());
             holder.mWorkoutTimeTextView.setText(Utils.formatTimeText(itemData.getWorkoutTime()));
             holder.mRestTimeTextView.setText(Utils.formatTimeText(itemData.getRestTime()));
             holder.mPrepareTimeTextView.setText(Utils.formatTimeText(itemData.getPrepareTime()));
@@ -118,7 +121,7 @@ public class ListCardAdapter extends RecyclerView.Adapter<ListCardAdapter.ViewHo
                     Intent intent = new Intent();
                     intent.setClass(mContext, EditActivity.class);
                     putData(intent, itemData);
-                    mContext.startActivity(intent);
+                    ((MainActivity) mContext).startActivityForResult(intent, 1001);
                 }
             });
 

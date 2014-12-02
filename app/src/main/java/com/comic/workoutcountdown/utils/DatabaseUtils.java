@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.comic.workoutcountdown.CountdownData;
+import com.comic.workoutcountdown.Loge;
 import com.comic.workoutcountdown.database.TimerProvider;
 
 import java.util.ArrayList;
@@ -33,6 +34,30 @@ public class DatabaseUtils {
             contentValues.put(TimerProvider.KEY_TIMER_CREATE_DATE, countdown.getCreateTime());
 
             contentResolver.insert(TimerProvider.CONTENT_URI_TIMER, contentValues);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean updateCountdown(Context context, CountdownData countdown) {
+        if (context != null && countdown != null) {
+            ContentResolver contentResolver = context.getContentResolver();
+            if (contentResolver == null) {
+                return false;
+            }
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TimerProvider.KEY_TIMER_WORKOUT_NAME, countdown.getName() == null ? "" : countdown.getName());
+            contentValues.put(TimerProvider.KEY_TIMER_WORKOUT_TIME, countdown.getWorkoutTime());
+            contentValues.put(TimerProvider.KEY_TIMER_REST_TIME, countdown.getRestTime());
+            contentValues.put(TimerProvider.KEY_TIMER_PREPARE_TIME, countdown.getPrepareTime());
+            contentValues.put(TimerProvider.KEY_TIMER_SETS, countdown.getSets());
+            contentValues.put(TimerProvider.KEY_TIMER_REPET, countdown.getRepets());
+            contentValues.put(TimerProvider.KEY_TIMER_CREATE_DATE, countdown.getCreateTime());
+
+            String where = TimerProvider.KEY_TIMER_ID + "=" + "?";
+            String whereArgus[] = {String.valueOf(countdown.getId())};
+            long id = contentResolver.update(TimerProvider.CONTENT_URI_TIMER, contentValues, where, whereArgus);
             return true;
         }
         return false;
