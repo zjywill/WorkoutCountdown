@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -220,6 +221,19 @@ public class EditActivity extends Activity {
             break;
         }
         return true;
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imeManager = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+                imeManager.hideSoftInputFromWindow(mNameEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }, 200);
     }
 
     private void getValuesAndSave() {
