@@ -223,19 +223,6 @@ public class EditActivity extends Activity {
         return true;
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imeManager = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
-                imeManager.hideSoftInputFromWindow(mNameEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }, 200);
-    }
-
     private void getValuesAndSave() {
 
         final String name = mNameEdit.getText().toString();

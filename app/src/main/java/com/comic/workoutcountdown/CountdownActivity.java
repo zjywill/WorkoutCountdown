@@ -65,6 +65,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
     private int mPrepareId;
     private int mWorkoutId;
     private int mRestId;
+    private int mWorkoutCompleteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,11 +143,12 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
         mWorkoutColor = getResources().getColor(R.color.green_500);
         mRestColor = getResources().getColor(R.color.red_500);
 
-        mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         mDiId = mSoundPool.load(this, R.raw.di, 1);
         mPrepareId = mSoundPool.load(this, R.raw.prepare, 1);
         mWorkoutId = mSoundPool.load(this, R.raw.workout, 1);
         mRestId = mSoundPool.load(this, R.raw.rest, 1);
+        mWorkoutCompleteId = mSoundPool.load(this, R.raw.workoutcompleted, 1);
     }
 
     @Override
@@ -209,6 +211,7 @@ public class CountdownActivity extends Activity implements View.OnClickListener 
     private void vibrateLong() {
         if (mVibrationState && mVibrator != null) {
             mVibrator.vibrate(1200);
+            playDong(mWorkoutCompleteId);
         }
     }
 
